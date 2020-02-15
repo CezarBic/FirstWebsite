@@ -1,0 +1,31 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}FirstBundle:Users:show{% endblock %}
+
+{% block body %}
+<h1 align="center">Welcome to the Users:show page</h1>
+    <div>
+
+            <div align="center">
+                <table border="1px">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Surname</th>
+                        <th>Email</th>
+                        <th>Username</th>
+                    </tr>
+                    {% for user in repository %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.surname }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.username }}</td>
+                    </tr>
+                    {% endfor%}
+                </table>
+            </div>
+
+    </div>
+{% endblock %}

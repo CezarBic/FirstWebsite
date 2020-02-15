@@ -1,0 +1,18 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}FirstBundle:Users:create{% endblock %}
+
+{% block body %}
+<h1 align="center" >Welcome to the Users:create page</h1>
+    <div align="center" style="width: auto; height: 400px; border: blue 1px solid; display: inline-block;">
+    {{ form_start(form, {'action': path('create'), 'method': 'POST'}) }}
+        <div style="margin-top: 10px"><label style="margin-top: 10px">Name<div style="margin-top: 10px;" >{{ form_widget(form.name) }}</div></label></div>
+        <div style="margin-top: 10px"><label style="margin-top: 10px">Surname<div style="margin-top: 10px;" >{{ form_widget(form.surname) }}</div></label></div>
+        <div style="margin-top: 10px"><label style="margin-top: 10px">Username<div style="margin-top: 10px;" >{{ form_widget(form.username) }}</div></label></div>
+        <div style="margin-top: 10px"><label style="margin-top: 10px">E-mail<div style="margin-top: 10px;" >{{ form_widget(form.email) }}</div></label></div>
+        <div style="margin-top: 10px"><label style="margin-top: 10px">Password<div style="margin-top: 10px;" >{{ form_widget(form.password) }}</div></label></div>
+        <div style="margin-top: 10px"><label style="margin-top: 10px">Confirm Password<div style="margin-top: 10px;" >{{ form_widget(form.cpassword) }}</div></label></div>
+        <div style="margin-top: 10px;" >{{ form_widget(form.save) }}</div>
+    {{ form_end(form) }}
+    </div>
+{% endblock %}
