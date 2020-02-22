@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded',function (e) {
     //     edit[i].addEventListener('click', (e) => {
     //         e.preventDefault();
     //         const id = e.target.getAttribute('data-id');
-    //         fetch(`/edit/${id}`,{method: 'POST'}).then(result => 1);
+    //         fetch(`/edit/edit/${id}`,{method: 'POST'}).then(result => 1);
     //     });
     // }
 

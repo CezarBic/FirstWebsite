@@ -58,10 +58,13 @@ class GalleryController extends Controller
             $fs->mkdir($destination."/".$ses);
             $a = $destination."/".$ses;
             $extension = $uploadedFile->guessExtension();
-            $fileName =  $place . "_" . uniqid() . '.' . $extension;
-            $uploadedFile->move($a, $fileName);
-            $message = "Your post was successfully uploaded!";
-
+            if($extension === 'jpeg' || $extension === 'png' ) {
+                $fileName = $place . "_" . uniqid() . '.' . $extension;
+                $uploadedFile->move($a, $fileName);
+            }else{
+                $message = "You need jpg or png extension to complete the upload";
+                return $this->render('FirstBundle:Gallery:post.html.twig', array('message'=>$message));
+            }
             if(!empty(trim($place)) && !empty(trim($text))) {
                 $sesId = $session->get('id');
                 $em = $this->getDoctrine()->getManager();
@@ -78,7 +81,7 @@ class GalleryController extends Controller
                 $em->persist($post);
                 $em->flush();
 
-
+                $message = "Your post was successfully uploaded!";
                 return $this->redirect('/gallery');
             }else{
                 $message = "You need to complete all the fields";

@@ -16,8 +16,8 @@
                         {% endfor %}
 {% endif %}
             </div>
-            <form id="formm" method="post">
-                <input type="text" id="message" name="message" autocomplete="off" autofocus
+            <form id="formm" data-id="{{ app.session.get('username') }}" method="post">
+                <input type="text" id="message" name="message"  autocomplete="off" autofocus
                        placeholder="Type your message...">
                 <input type="submit" id="send" name="send" value="Send">
             </form>
