@@ -57,6 +57,12 @@ class Users
      */
     private $password;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Posts", mappedBy="user")
+     */
+
+    private $posts;
+
 
     /**
      * Get id
@@ -187,5 +193,23 @@ class Users
     {
         return $this->password;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPosts()
+    {
+        return $this->posts;
+    }
+
+    /**
+     * @param mixed $posts
+     */
+    public function setPosts($posts): void
+    {
+        $this->posts = $posts;
+    }
+
+
 }
 

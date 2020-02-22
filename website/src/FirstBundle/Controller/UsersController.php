@@ -7,14 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-/**
- * @Route("/user")
- *
- */
+
 class UsersController extends Controller
 {
     /**
@@ -22,25 +16,15 @@ class UsersController extends Controller
      * @Template("FirstBundle:Users:create.html.twig")
      *
      */
-    public function createAction(Request $request)
+    public function createAction()
     {
-        $form = $this->createFormBuilder()
-            ->add('name', TextType::class)
-            ->add('surname', TextType::class)
-            ->add('username', TextType::class)
-            ->add('email', TextType::class)
-            ->add('password', PasswordType::class)
-            ->add('cpassword', PasswordType::class)
-            ->add('save', SubmitType::class, ['label' => 'Add User'])
-            ->getForm();
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $n = $form['name']->getData();
-            $u = $form['username']->getData();
-            $s = $form['surname']->getData();
-            $e = $form['email']->getData();
-            $p = $form['password']->getData();
-            $pc = $form['cpassword']->getData();
+        $n = isset($_POST['name']) ? $_POST['name']: null;
+        $u = isset($_POST['username']) ? $_POST['username'] : null;
+        $s = isset($_POST['surname']) ? $_POST['surname'] : null;
+        $e = isset($_POST['email']) ? $_POST['email'] : null;
+        $p = isset($_POST['password']) ? $_POST['password'] : null;
+        $pc = isset($_POST['cpassword']) ? $_POST['cpassword'] : null;
+        if (isset($_POST['submit'])) {
             if (!empty(trim($n)) && !empty(trim($s)) && !empty(trim($e))
                 && !empty(trim($p)) && !empty(trim($u)) && !empty(trim($pc))) {
                     //allows only characters from a-z A-Z 0-9
@@ -49,11 +33,13 @@ class UsersController extends Controller
                 $z = preg_replace("/([^a-zA-Z0-9])/", "", $u);
 
                 if(filter_var($e, FILTER_VALIDATE_EMAIL)){
-                    $c =filter_var($e, FILTER_VALIDATE_EMAIL);//validates email
+                    $c =filter_var($e, FILTER_VALIDATE_EMAIL);
                     $f = preg_replace("/([^a-zA-Z0-9])/", "", $p);
-                    if($f == $pc){ //check if passwords match
-                        if($g = preg_match("/(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\d)[a-zA-Z\d]{8,}/", $f)) {
-                            $ph = password_hash($g, PASSWORD_DEFAULT);//encripts the password
+                    if($f == $pc){
+                        if(preg_match("/(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\d)[a-zA-Z\d]{8,}/", $f)) {
+
+                            $ph = password_hash($f, PASSWORD_DEFAULT);
+
                             $user = new Users();
                             $user->setName($a);
                             $user->setSurname($b);
@@ -62,37 +48,51 @@ class UsersController extends Controller
                             $user->setPassword($ph);
 
                             $em = $this->getDoctrine()->getManager();
-                            $em->persist($user);
-                            $em->flush();
+                            $repository = $em->getRepository('FirstBundle:Users');
 
-                           return $this->redirect("/user/create");
+                            $post = $repository->findOneBy(['username'=>$z]);
+                            $epost = $repository->findOneBy(['email'=>$c]);
+                            if($post){
+                                $message = "Username is taken!";
+                                return $this->render("FirstBundle:Users:create.html.twig", (['message'=>$message]));
+                            }elseif($epost) {
+                                $message = "E-mail is taken!";
+                                return $this->render("FirstBundle:Users:create.html.twig", (['message' => $message]));
+                            }else{
+
+                            $em->persist($user);
+                                $em->flush();
+                                $message = "Your registration is complete! You can now login";
+                                return $this->render("FirstBundle:Users:login.html.twig", (['message'=>$message]));
+
+                            }
+
                         }else{
-                            echo "Your password must be 8 characters long and contain 'A','a','1'";
+
+                            $message = "Your password must be 8 characters long and to contain 'A','a','1'.";
+                            return $this->render("FirstBundle:Users:create.html.twig", (['message'=>$message]));
+
                         }
 
                     }else{
-                        echo "Password don`t match!";
+
+                        $message = "Password don`t match!";
+                        return $this->render("FirstBundle:Users:create.html.twig", (['message'=>$message]));
+
                     }
                 }else{
-                    echo "Your email is not valid!";
+                    $message = "Your email is not valid!";
+                    return $this->render("FirstBundle:Users:create.html.twig", (['message'=>$message]));
+
                 }
             } else {
-                echo "Please complete all the fields!";
+                $message = "Please complete all the fields!";
+                return $this->render("FirstBundle:Users:create.html.twig", (['message'=>$message]));
+
             }
         }
-        return $this->render("FirstBundle:Users:create.html.twig", array('form' => $form->createView()));
+
+        return $this->render("FirstBundle:Users:create.html.twig", array());
     }
 
-    /**
-     * @Route("/show", name="show")
-     * @Template("FirstBundle:Users:show.html.twig")
-     **/
-    public function newAction(Request $request){
-
-        $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository('FirstBundle:Users')->findAll();
-
-        return $this->render("FirstBundle:Users:show.html.twig",array('repository'=>$repository));
-
-    }
 }

@@ -1,12 +1,23 @@
-<h1>Hello World!</h1>
+{% extends "::base.html.twig" %}
+{% block title %}Home{% endblock %}
+{% block body %}
+    {% if photos ?? [] %}
+        <div align="center" style="height: 100%; width: 100%;margin-top:150px; margin-bottom: 100px;">
+        {% for user in photos  %}
+            {% for post in user.posts  %}
+            <h3>{{ post.description }}</h3>
 
-<div>
-    <label>
-        <a href="{{ path("create" ) }}">Add new user</a>
-    </label>
-</div>
-<div>
-    <label>
-        <a href="{{ path("show" ) }}">Display all users</a>
-    </label>
-</div>
+            <img align="center" style="width: 700px; height: 700px; position: flex;" src="{{ asset('images/'~user.username~'/'~ post.filename) }}" class="img-responsive img-fluid" alt="">
+            <p>Posted by: {{ user.username }}</p>
+        </br>
+
+    {% endfor %}
+{% endfor %}
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+{% block javascripts %}{% endblock %}
+
+

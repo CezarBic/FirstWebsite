@@ -1,0 +1,30 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Chat{% endblock %}
+
+{% block body %}
+    <body>
+    <nav>
+    </nav>
+    <div class="messenger">
+        <div>
+            <div id="messages">
+{% if messages ?? [] %}
+                        {% for res in messages  %}
+                            <h3>{{ res.fromw }}:</h3> <p style="font-size: 16px">-{{ res.messages }}   | {{ res.created | date("m/d/Y") }}</p>
+
+                        {% endfor %}
+{% endif %}
+            </div>
+            <form id="formm" method="post">
+                <input type="text" id="message" name="message" autocomplete="off" autofocus
+                       placeholder="Type your message...">
+                <input type="submit" id="send" name="send" value="Send">
+            </form>
+        </div>
+    </div>
+    </body>
+    <script src="{{ asset('bundles/first/js/js.js') }}"></script>
+    <script src="{{ asset('bundles/first/js/app.js') }}"></script>
+
+{% endblock %}

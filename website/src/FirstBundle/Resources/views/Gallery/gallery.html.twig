@@ -1,0 +1,42 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Gallery{% endblock %}
+
+{% block body %}
+
+<h1 align="center" style="margin-top: 100px;">Gallery</h1>
+    <div align="center" style="margin-top: 100px"><h1>{{ message ?? "" }}</h1></div>
+    <div align="center" style="width: 100%; height: 800px; position:absolute;margin-bottom: 100px; ">
+        {% if photos ?? [] %}
+            {% for user in photos  %}
+
+                {% for post in user.posts  %}
+
+                    <div id="taticu" style="width: 300px; height: 530px; display: inline-block; position:flex;">
+                        <h3 align="center" > {{ post.place  }}</h3>
+                        <img style="width: 300px; height: 300px; position:flex; display: inline-block; padding: 10px" src="{{ asset('images/'~user.username~'/'~ post.filename) }}">
+                        <div align="center" style="width: 250px; height: 50px;background: #2aabd2; display: inline-block; position:flex;">
+                            <p>{{ post.description }}</p>
+                        </div>
+                        <div align="center" style="width: 400px; height: 50px; display: inline-block; position:flex;">
+                            <div align="center" style="display: inline; "><a href="{{ asset('images/'~user.username~'/'~ post.filename) }}" id="view"  class="btn btn-primary dropdown-toggle get-started-btn mt-1 mb-1" data-id="{{ post.id }}">View</a></div>
+                            <div align="center" style="display: inline; "><a href="{{ asset("edit"~'/'~ post.id) }}" id="edit"  class="btn btn-primary dropdown-toggle get-started-btn mt-1 mb-1" data-id="{{ post.id }}">Edit</a></div>
+                            <div align="center" style="display: inline; "><a class="delete" href="#" id="delete" class="nav-link dropdown-toggle" data-id="{{ post.id }}" >Delete</a></div>
+                        </div>
+                    </div>
+
+                {% endfor %}
+
+            {% endfor %}
+
+        {% endif %}
+    </div>
+
+{% endblock %}
+ {% block javascripts %}
+     <script src="{{ asset('bundles/first/js/app.js') }}"></script>
+     <script
+             src="https://code.jquery.com/jquery-3.4.1.js"
+             integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+             crossorigin="anonymous"></script>
+ {% endblock %}
